@@ -49,6 +49,11 @@ CommunityHero is an AI-powered community issue reporting platform built using Dj
 ![Dashboard](screenshots/dashboard.png)
 
 ---
+## Issue List
+
+![Issue List](screenshots/issue_list.png)
+
+---
 
 ## Create Issue
 
