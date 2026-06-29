@@ -6,3 +6,4 @@ reportlab
 django-extensions
 Werkzeug
 pyOpenSSL
+gunicorn
