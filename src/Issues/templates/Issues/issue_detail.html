@@ -1,0 +1,295 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>{{ issue.title }}</title>
+
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>{{ issue.title }}</h1>
+
+    <div class="card">
+
+        <h2>Issue Information</h2>
+
+        <p><strong>Description</strong></p>
+
+        <p>{{ issue.description }}</p>
+
+        <p><strong>Category:</strong> {{ issue.category }}</p>
+
+        <p><strong>Priority:</strong> {{ issue.priority }}</p>
+
+        <p><strong>Location:</strong> {{ issue.location }}</p>
+
+        <p>
+
+            <strong>Status:</strong>
+
+            {% if issue.status == "pending" %}
+                <span class="pending-badge">Pending</span>
+
+            {% elif issue.status == "verified" %}
+                <span class="verified-badge">Verified</span>
+
+            {% elif issue.status == "in_progress" %}
+                <span class="progress-badge">In Progress</span>
+
+            {% elif issue.status == "resolved" %}
+                <span class="resolved-badge">Resolved</span>
+
+            {% endif %}
+
+        </p>
+
+        {% if issue.summary %}
+
+            <p><strong>AI Summary</strong></p>
+
+            <p>{{ issue.summary }}</p>
+
+        {% endif %}
+
+        {% if issue.latitude and issue.longitude %}
+
+            <p>
+
+                <strong>Coordinates:</strong>
+
+                {{ issue.latitude }},
+                {{ issue.longitude }}
+
+            </p>
+
+            <p>
+
+                <a href="https://www.google.com/maps?q={{ issue.latitude }},{{ issue.longitude }}" target="_blank">
+
+                    📍 Open in Google Maps
+
+                </a>
+
+            </p>
+
+        {% endif %}
+
+    </div>
+
+    {% if issue.image %}
+
+    <div class="card">
+
+        <h2>Issue Image</h2>
+
+        <img src="{{ issue.image.url }}" alt="Issue Image">
+
+    </div>
+
+    {% endif %}
+
+    {% if issue.video %}
+
+    <div class="card">
+
+        <h2>Issue Video</h2>
+
+        <video controls width="100%">
+            <source src="{{ issue.video.url }}">
+        </video>
+
+    </div>
+
+    {% endif %}
+
+    <!-- Community Verification -->
+
+    <div class="card">
+
+        <h2>Community Verification</h2>
+
+        <p><strong>👍 Upvotes:</strong> {{ upvotes }}</p>
+
+        <p><strong>👎 Downvotes:</strong> {{ downvotes }}</p>
+
+        {% if current_user.role == "citizen" %}
+
+            <br>
+
+            <a class="btn"
+               href="{% url 'verify_issue' issue.id 'upvote' %}">
+
+                👍 Upvote
+
+            </a>
+
+            <a class="btn logout"
+               href="{% url 'verify_issue' issue.id 'downvote' %}">
+
+                👎 Downvote
+
+            </a>
+
+        {% else %}
+
+            <div class="success">
+
+                <h3>🏛 Authority View</h3>
+
+                <p>
+
+                    Authorities cannot vote on issues.
+
+                </p>
+
+                <p>
+
+                    They can only monitor community votes.
+
+                </p>
+
+            </div>
+
+        {% endif %}
+
+    </div>
+
+    <!-- Authority Updates -->
+
+    <div class="card">
+
+        <h2>Authority Updates</h2>
+
+        {% for update in issue.updates.all %}
+
+            <div class="field">
+
+                <strong>{{ update.authority.name }}</strong>
+
+                <p>{{ update.update_message }}</p>
+
+                <small>{{ update.created_at }}</small>
+
+                <hr>
+
+            </div>
+
+        {% empty %}
+
+            <p>No updates yet.</p>
+
+        {% endfor %}
+
+        {% if current_user.role == "authority" or current_user.role == "admin" %}
+
+            <h3>Add Update</h3>
+
+            <form method="post"
+                  action="{% url 'add_authority_update' issue.id %}">
+
+                {% csrf_token %}
+
+                {{ update_form.as_p }}
+
+                <button>
+
+                    Save Update
+
+                </button>
+
+            </form>
+
+        {% endif %}
+
+    </div>
+
+    <!-- Comments -->
+
+    <div class="card">
+
+        <h2>Comments</h2>
+
+        {% for comment in issue.comments.all %}
+
+            <div class="field">
+
+                <strong>{{ comment.user.name }}</strong>
+
+                <p>{{ comment.message }}</p>
+
+                <small>{{ comment.created_at }}</small>
+
+                <hr>
+
+            </div>
+
+        {% empty %}
+
+            <p>No comments yet.</p>
+
+        {% endfor %}
+
+        {% if current_user.role == "citizen" %}
+
+            <h3>Add Comment</h3>
+
+            <form method="post">
+
+                {% csrf_token %}
+
+                {{ form.as_p }}
+
+                <button>
+
+                    Post Comment
+
+                </button>
+
+            </form>
+
+        {% else %}
+
+            <div class="success">
+
+                <h3>🏛 Authority View</h3>
+
+                <p>
+
+                    Authorities cannot post comments.
+
+                </p>
+
+                <p>
+
+                    They can only read citizen comments and publish official updates.
+
+                </p>
+
+            </div>
+
+        {% endif %}
+
+    </div>
+
+    <br>
+
+    <a class="btn"
+       href="{% url 'issue_list' %}">
+
+        ⬅ Back to Issues
+
+    </a>
+
+</div>
+
+</body>
+
+</html>

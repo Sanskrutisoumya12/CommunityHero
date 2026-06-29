@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+{% load static %}
+<head>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <title>Issue Submitted Successfully</title>
+</head>
+<body>
+<div class="container">
+    <div class="success-box">
+        ✅ Issue Submitted Successfully
+    </div>
+    <div class="field">
+        <div class="label">Title</div>
+        <div class="value">{{ issue.title }}</div>
+    </div>
+    <div class="field">
+        <div class="label">Description</div>
+        <div class="value">{{ issue.description }}</div>
+    </div>
+    <div class="field">
+        <div class="label">Category</div>
+        <div class="value">{{ issue.category }}</div>
+    </div>
+    <div class="field">
+        <div class="label">Priority</div>
+        <div class="value">{{ issue.priority }}</div>
+    </div>
+    <div class="field">
+        <div class="label">Summary</div>
+        <div class="value">{{ issue.summary }}</div>
+    </div>
+    <div class="field">
+        <div class="label">Location</div>
+        <div class="value">{{ issue.location }}</div>
+    </div>
+    {% if issue.image %}
+    <div class="field">
+        <div class="label">Uploaded Image</div>
+        <img src="{{ issue.image.url }}" alt="Issue Image">
+    </div>
+    {% endif %}
+    {% if issue.video %}
+    <div class="field">
+        <div class="label">Uploaded Video</div>
+        <video controls>
+            <source src="{{ issue.video.url }}">
+        </video>
+    </div>
+    {% endif %}
+    <a href="{% url 'create_issue' %}" class="btn">
+        Submit Another Issue
+    </a>
+    |
+    <a href="{% url 'issue_detail' issue.id %}">
+        issue details
+    </a>
+</div>
+</body>
+</html>

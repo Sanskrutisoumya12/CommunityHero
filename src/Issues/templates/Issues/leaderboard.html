@@ -1,0 +1,130 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>Leaderboard</title>
+
+    <link rel="stylesheet"
+          href="{% static 'Issues/css/style.css' %}">
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>🏆 Community Leaderboard</h1>
+<form method="GET" class="search-form">
+
+    <input
+        type="text"
+        name="q"
+        placeholder="🔍 Search by name..."
+        value="{{ query }}"
+    >
+
+    <button type="submit">
+        Search
+    </button>
+
+</form>
+
+<br>
+<h2>👤 Citizen Leaderboard</h2>
+
+{% for user in citizens %}
+
+<div class="card">
+
+<h2>
+
+{% if forloop.counter == 1 %}
+🥇
+{% elif forloop.counter == 2 %}
+🥈
+{% elif forloop.counter == 3 %}
+🥉
+{% else %}
+🏅
+{% endif %}
+
+{{ user.name }}
+
+</h2>
+
+<p>📧 {{ user.email }}</p>
+
+<h3>⭐ {{ user.points }} Points</h3>
+
+<p>Rank #{{ forloop.counter }}</p>
+
+</div>
+
+{% empty %}
+
+<div class="card">
+
+<p>No citizens found.</p>
+
+</div>
+
+{% endfor %}
+
+<br><br>
+<h2>🏛 Authority Leaderboard</h2>
+
+{% for user in authorities %}
+
+<div class="card">
+
+<h2>
+
+{% if forloop.counter == 1 %}
+🥇
+{% elif forloop.counter == 2 %}
+🥈
+{% elif forloop.counter == 3 %}
+🥉
+{% else %}
+🏅
+{% endif %}
+
+{{ user.name }}
+
+</h2>
+
+<p>📧 {{ user.email }}</p>
+
+<h3>⭐ {{ user.points }} Points</h3>
+
+<p>Rank #{{ forloop.counter }}</p>
+
+</div>
+
+{% empty %}
+
+<div class="card">
+
+<p>No authorities found.</p>
+
+</div>
+
+{% endfor %}
+
+<br>
+
+<a class="btn"
+   href="{% url 'issue_list' %}">
+
+⬅ Back to Issues
+
+</a>
+
+</div>
+
+</body>
+
+</html>

@@ -1,0 +1,8 @@
+django
+pillow
+google-generativeai
+python-dotenv
+reportlab
+django-extensions
+Werkzeug
+pyOpenSSL

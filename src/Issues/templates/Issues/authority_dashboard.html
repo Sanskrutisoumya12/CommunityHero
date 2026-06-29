@@ -1,0 +1,159 @@
+
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>Authority Dashboard</title>
+
+    <link rel="stylesheet"
+          href="{% static 'Issues/css/style.css' %}">
+
+</head>
+
+<body>
+
+<div class="dashboard-container">
+
+    <h1 class="dashboard-title">
+        🏛 Authority Dashboard
+    </h1>
+
+    <!-- Dashboard Summary -->
+
+    <div class="dashboard-grid">
+
+        <div class="card blue">
+            <h2>{{ total_issues }}</h2>
+            <p>Total Issues</p>
+        </div>
+
+        <div class="card orange">
+            <h2>{{ pending }}</h2>
+            <p>Pending</p>
+        </div>
+
+        <div class="card green">
+            <h2>{{ verified }}</h2>
+            <p>Verified</p>
+        </div>
+
+        <div class="card purple">
+            <h2>{{ in_progress }}</h2>
+            <p>In Progress</p>
+        </div>
+
+        <div class="card red">
+            <h2>{{ resolved }}</h2>
+            <p>Resolved</p>
+        </div>
+
+    </div>
+
+    <!-- Recent Issues -->
+
+    <div class="container">
+
+        <h2>📋 Recent Issues</h2>
+
+        {% for issue in recent_issues %}
+
+        <div class="card" style="color:#333;text-align:left;">
+
+            <h3>{{ issue.title }}</h3>
+
+            <p>
+                <strong>Category:</strong>
+                {{ issue.category }}
+            </p>
+
+            <p>
+                <strong>Location:</strong>
+                {{ issue.location }}
+            </p>
+
+            <p>
+
+                <strong>Status:</strong>
+
+                {% if issue.status == "pending" %}
+
+                    <span class="pending-badge">
+                        Pending
+                    </span>
+
+                {% elif issue.status == "verified" %}
+
+                    <span class="verified-badge">
+                        Verified
+                    </span>
+
+                {% elif issue.status == "in_progress" %}
+
+                    <span class="progress-badge">
+                        In Progress
+                    </span>
+
+                {% elif issue.status == "resolved" %}
+
+                    <span class="resolved-badge">
+                        Resolved
+                    </span>
+
+                {% endif %}
+
+            </p>
+
+            <br>
+
+            <a href="{% url 'issue_detail' issue.id %}"
+               class="btn">
+
+                👁 View Issue
+
+            </a>
+
+        </div>
+
+        {% empty %}
+
+        <div class="card" style="color:#333;">
+            <p>No issues available.</p>
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+    <br>
+
+    <!-- Buttons -->
+
+    <div class="dashboard-buttons">
+
+        <a href="{% url 'issue_list' %}" class="btn">
+            📋 View All Issues
+        </a>
+
+        <a href="{% url 'notifications' %}" class="btn">
+            🔔 Notifications
+        </a>
+
+        <a href="{% url 'profile' %}" class="btn">
+            👤 Profile
+        </a>
+
+        <a href="{% url 'logout' %}" class="btn logout">
+            🚪 Logout
+        </a>
+
+    </div>
+
+</div>
+
+</body>
+
+</html>
+

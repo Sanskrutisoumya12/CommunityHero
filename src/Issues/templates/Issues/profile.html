@@ -1,0 +1,347 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>My Profile</title>
+
+    <link rel="stylesheet"
+          href="{% static 'Issues/css/style.css' %}">
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>👤 My Profile</h1>
+
+    <!-- ================= PROFILE CARD ================= -->
+    <div class="profile-card">
+
+    <div class="profile-picture-wrapper">
+
+        {% if user.profile_picture %}
+            <img src="{{ user.profile_picture.url }}"
+                 class="profile-image"
+                 id="profilePic"
+                 alt="Profile Picture">
+        {% else %}
+            <img src="{% static 'Issues/images/profile_image.jpeg' %}"
+                 class="profile-image"
+                 id="profilePic"
+                 alt="Default Profile Picture">
+        {% endif %}
+
+        <!-- Popup Menu -->
+        <div id="profileMenu" class="profile-menu">
+
+            <a href="#" id="viewPhoto">
+                📷 View Photo
+            </a>
+
+            <a href="{% url 'edit_profile' %}">
+                ✏ Change Photo
+            </a>
+
+            {% if user.profile_picture %}
+            <a href="{% url 'remove_profile_picture' %}">
+                🗑 Remove Photo
+            </a>
+            {% endif %}
+
+        </div>
+
+    </div>
+
+    <h2>{{ user.name }}</h2>
+
+    <p><strong>📧 Email:</strong> {{ user.email }}</p>
+
+    <p><strong>📱 Phone:</strong> {{ user.phone }}</p>
+
+    <p><strong>👥 Role:</strong> {{ user.role|title }}</p>
+
+    <hr>
+
+    <h3>⭐ {{ user.points }} Points</h3>
+
+    {% if user.role == "citizen" %}
+
+        <h3>🏆 Citizen Rank #{{ rank }}</h3>
+
+        {% elif user.role == "authority" %}
+
+        <h3>🏆 Authority Rank #{{ rank }}</h3>
+
+        {% else %}
+
+        <h3>🏆 Rank #{{ rank }}</h3>
+
+        {% endif %}
+
+    <br>
+
+    <a href="{% url 'edit_profile' %}" class="btn">
+        ✏ Edit Profile
+    </a>
+
+</div>
+
+    <br>
+
+    <!-- ========================================================= -->
+    <!--                  CITIZEN PROFILE                          -->
+    <!-- ========================================================= -->
+
+    {% if user.role == "citizen" %}
+
+    <div class="card">
+
+        <h2>📊 Citizen Statistics</h2>
+
+        <p><strong>📄 Issues Reported:</strong> {{ total_issues }}</p>
+
+        <p><strong>💬 Comments Posted:</strong> {{ total_comments }}</p>
+
+    </div>
+
+    <br>
+
+    <div class="card">
+
+        <h2>📄 My Recent Issues</h2>
+
+        {% for issue in my_issues %}
+
+            <div class="field">
+
+                <h3>{{ issue.title }}</h3>
+
+                <p><strong>Category:</strong> {{ issue.category }}</p>
+
+                <p><strong>Location:</strong> {{ issue.location }}</p>
+
+                <p>
+
+                    <strong>Status:</strong>
+
+                    {% if issue.status == "pending" %}
+                        <span class="pending-badge">Pending</span>
+
+                    {% elif issue.status == "verified" %}
+                        <span class="verified-badge">Verified</span>
+
+                    {% elif issue.status == "in_progress" %}
+                        <span class="progress-badge">In Progress</span>
+
+                    {% elif issue.status == "resolved" %}
+                        <span class="resolved-badge">Resolved</span>
+
+                    {% endif %}
+
+                </p>
+
+                <a href="{% url 'issue_detail' issue.id %}"
+                   class="btn">
+
+                    👁 View Issue
+
+                </a>
+
+            </div>
+
+            <hr>
+
+        {% empty %}
+
+            <p>No issues reported yet.</p>
+
+        {% endfor %}
+
+    </div>
+
+    <br>
+
+    <div class="card">
+
+        <h2>💬 My Recent Comments</h2>
+
+        {% for comment in my_comments %}
+
+            <div class="field">
+
+                <strong>{{ comment.issue.title }}</strong>
+
+                <p>{{ comment.message }}</p>
+
+                <small>{{ comment.created_at }}</small>
+
+            </div>
+
+            <hr>
+
+        {% empty %}
+
+            <p>No comments yet.</p>
+
+        {% endfor %}
+
+    </div>
+
+    <!-- ========================================================= -->
+    <!--                  AUTHORITY PROFILE                        -->
+    <!-- ========================================================= -->
+
+    {% elif user.role == "authority" %}
+
+    <div class="card">
+
+        <h2>🏛 Authority Statistics</h2>
+
+        <p><strong>📝 Authority Updates:</strong> {{ total_updates }}</p>
+
+        <p><strong>🟡 Pending Issues:</strong> {{ pending }}</p>
+
+        <p><strong>🔵 Verified Issues:</strong> {{ verified }}</p>
+
+        <p><strong>🟣 In Progress:</strong> {{ in_progress }}</p>
+
+        <p><strong>🟢 Resolved:</strong> {{ resolved }}</p>
+
+    </div>
+
+    <br>
+
+    <div class="card">
+
+        <h2>📋 My Recent Authority Updates</h2>
+
+        {% for update in authority_updates %}
+
+            <div class="field">
+
+                <h3>{{ update.issue.title }}</h3>
+
+                <p>{{ update.update_message }}</p>
+
+                <small>{{ update.created_at }}</small>
+
+            </div>
+
+            <hr>
+
+        {% empty %}
+
+            <p>No authority updates yet.</p>
+
+        {% endfor %}
+
+    </div>
+
+    {% endif %}
+
+    <br>
+
+    <a href="{% url 'dashboard' %}"
+       class="btn">
+
+        ⬅ Back to Dashboard
+
+    </a>
+
+</div>
+
+<div id="imageModal" class="image-modal">
+
+    <span class="close-modal">&times;</span>
+
+    <img id="modalImage" class="modal-image">
+
+    <br><br>
+
+    <a id="downloadImage" download class="btn">
+        ⬇ Download
+    </a>
+
+</div>
+<script>
+    const profilePic = document.getElementById("profilePic");
+    const profileMenu = document.getElementById("profileMenu");
+
+    const modal = document.getElementById("imageModal");
+    const modalImage = document.getElementById("modalImage");
+    const closeBtn = document.querySelector(".close-modal");
+    const downloadBtn = document.getElementById("downloadImage");
+
+    profilePic.onclick = function(e){
+
+        e.stopPropagation();
+
+        if(profileMenu.style.display=="block"){
+
+            profileMenu.style.display="none";
+
+        }else{
+
+            profileMenu.style.display="block";
+
+        }
+
+    };
+
+    document.onclick=function(){
+
+        profileMenu.style.display="none";
+
+    };
+
+    document.getElementById("viewPhoto").onclick=function(e){
+
+        e.preventDefault();
+
+        e.stopPropagation();
+
+        profileMenu.style.display="none";
+
+        modal.style.display="flex";
+
+        modalImage.src=profilePic.src;
+
+        downloadBtn.href=profilePic.src;
+
+    };
+
+    closeBtn.onclick=function(){
+
+        modal.style.display="none";
+
+    };
+
+    modal.onclick=function(e){
+
+        if(e.target===modal){
+
+            modal.style.display="none";
+
+        }
+
+    };
+
+    document.addEventListener("keydown",function(e){
+
+        if(e.key==="Escape"){
+
+            modal.style.display="none";
+
+        }
+
+    });
+
+    console.log(profileMenu);
+    console.log(profilePic);
+    console.log(document.getElementById("viewPhoto"));
+</script>
+</body>
+</html>

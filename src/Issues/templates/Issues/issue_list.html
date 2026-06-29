@@ -1,0 +1,145 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>Community Hero - Issues</title>
+
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>🌍 Community Hero</h1>
+
+    <h2>Reported Issues</h2>
+
+    <form method="get">
+
+        <input
+            type="text"
+            name="q"
+            placeholder="🔍 Search by title..."
+            value="{{ request.GET.q }}"
+        >
+
+        <select name="status">
+
+            <option value="">All Status</option>
+
+            <option value="pending">Pending</option>
+
+            <option value="verified">Verified</option>
+
+            <option value="in_progress">In Progress</option>
+
+            <option value="resolved">Resolved</option>
+
+        </select>
+
+        <button type="submit">
+            🔍 Search
+        </button>
+
+    </form>
+
+    <br>
+
+    <a href="{% url 'create_issue' %}" class="btn">
+        ➕ Report New Issue
+    </a>
+
+    <br><br>
+
+    {% for issue in issues %}
+
+    <div class="card">
+
+        <h2>{{ issue.title }}</h2>
+
+        <p>
+            <strong>📂 Category:</strong>
+            {{ issue.category }}
+        </p>
+
+        <p>
+            <strong>📍 Location:</strong>
+            {{ issue.location }}
+        </p>
+
+        <p>
+            <strong>⚠ Priority:</strong>
+
+            {% if issue.priority == "high" %}
+                🔴 High
+            {% elif issue.priority == "medium" %}
+                🟡 Medium
+            {% else %}
+                🟢 Low
+            {% endif %}
+        </p>
+
+        <p>
+
+            <strong>Status:</strong>
+
+            {% if issue.status == "pending" %}
+                <span class="pending-badge">Pending</span>
+
+            {% elif issue.status == "verified" %}
+                <span class="verified-badge">Verified</span>
+
+            {% elif issue.status == "in_progress" %}
+                <span class="progress-badge">In Progress</span>
+
+            {% elif issue.status == "resolved" %}
+                <span class="resolved-badge">Resolved</span>
+
+            {% endif %}
+
+        </p>
+
+        <p>
+
+            <strong>👤 Reporter:</strong>
+
+            {{ issue.reporter.name }}
+
+        </p>
+
+        <p>
+
+            <strong>📅 Reported:</strong>
+
+            {{ issue.created_at }}
+
+        </p>
+
+        <br>
+
+        <a href="{% url 'issue_detail' issue.id %}" class="btn">
+            👁 View Details
+        </a>
+
+    </div>
+
+    {% empty %}
+
+    <div class="card">
+
+        <h3>No issues found.</h3>
+
+    </div>
+
+    {% endfor %}
+
+</div>
+
+</body>
+
+</html>

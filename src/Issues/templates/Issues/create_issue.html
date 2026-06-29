@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    {% load static %}
+
+    <link rel="stylesheet"
+          href="{% static 'issues/css/style.css' %}">
+
+    <title>Create Issue</title>
+
+</head>
+<body>
+
+    <div class="container">
+
+        <h1>Report an Issue</h1>
+
+        {% if messages %}
+
+            {% for message in messages %}
+
+                <div class="success-message">
+                    {{ message }}
+                </div>
+
+            {% endfor %}
+
+        {% endif %}
+
+        <form method="post"
+              enctype="multipart/form-data">
+
+            {% csrf_token %}
+
+            {{ form.as_p }}
+
+            <button type="button"
+                    onclick="getLocation()">
+
+                Use My Current Location
+
+            </button>
+
+            <br><br>
+
+            <button type="submit">
+
+                Submit Issue
+
+            </button>
+
+        </form>
+
+    </div>
+
+    <script>
+
+    function getLocation() {
+
+        if (navigator.geolocation) {
+
+            navigator.geolocation.getCurrentPosition(
+
+                function(position) {
+
+                    document.getElementById(
+                        "id_latitude"
+                    ).value =
+                    position.coords.latitude;
+
+                    document.getElementById(
+                        "id_longitude"
+                    ).value =
+                    position.coords.longitude;
+
+                    alert(
+                        "Location captured successfully!"
+                    );
+
+                },
+
+                function(error) {
+
+                    alert(
+                        "Unable to get location."
+                    );
+
+                }
+
+            );
+
+        } else {
+
+            alert(
+                "Geolocation is not supported by this browser."
+            );
+
+        }
+
+    }
+
+    </script>
+
+</body>
+</html>

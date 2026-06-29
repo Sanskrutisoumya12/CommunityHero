@@ -1,0 +1,87 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard</title>
+
+    <link rel="stylesheet" href="{% static 'Issues/css/style.css' %}">
+</head>
+
+<body>
+
+<div class="dashboard-container">
+
+    <h1>📊 Civic Issue Dashboard</h1>
+
+    <div class="dashboard-grid">
+
+        <div class="card blue">
+            <h2>{{ total_issues }}</h2>
+            <p>Total Issues</p>
+        </div>
+
+        <div class="card orange">
+            <h2>{{ pending }}</h2>
+            <p>Pending</p>
+        </div>
+
+        <div class="card green">
+            <h2>{{ verified }}</h2>
+            <p>Verified</p>
+        </div>
+
+        <div class="card purple">
+            <h2>{{ in_progress }}</h2>
+            <p>In Progress</p>
+        </div>
+
+        <div class="card red">
+            <h2>{{ resolved }}</h2>
+            <p>Resolved</p>
+        </div>
+
+        <div class="card cyan">
+            <h2>{{ total_comments }}</h2>
+            <p>Comments</p>
+        </div>
+
+        <div class="card pink">
+            <h2>{{ total_verifications }}</h2>
+            <p>Verifications</p>
+        </div>
+
+    </div>
+
+    <div class="dashboard-buttons">
+
+        <a href="{% url 'create_issue' %}" class="btn">
+            ➕ Create Issue
+        </a>
+
+        <a href="{% url 'issue_list' %}" class="btn">
+            📋 View Issues
+        </a>
+
+        <a href="{% url 'leaderboard' %}" class="btn">
+            🏆 Leaderboard
+        </a>
+
+        <a href="{% url 'notifications' %}" class="btn">
+            🔔 Notifications
+        </a>
+
+        <a href="{% url 'profile' %}" class="btn">
+            👤 Profile
+        </a>
+
+        <a href="{% url 'logout' %}" class="btn logout">
+            🚪 Logout
+        </a>
+
+    </div>
+
+</div>
+
+</body>
+</html>

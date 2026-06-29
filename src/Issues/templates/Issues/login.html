@@ -1,0 +1,95 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>Login</title>
+
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+</head>
+
+<body>
+
+<div class="container" style="max-width:500px;">
+
+    <h1>🔐 Community Hero</h1>
+
+    <h2 style="text-align:center;">Login</h2>
+
+    {% if error %}
+    <div class="error">
+        {{ error }}
+    </div>
+    {% endif %}
+
+    <form method="post">
+
+        {% csrf_token %}
+
+        {{ form.as_p }}
+
+        <label style="display:flex;align-items:center;gap:8px;margin-bottom:20px;">
+
+            <input
+                type="checkbox"
+                onclick="togglePassword()"
+                style="width:auto;margin:0;"
+            >
+
+            Show Password
+
+        </label>
+
+        <button type="submit">
+            🔓 Login
+        </button>
+
+    </form>
+
+    <br>
+
+    <div style="text-align:center;">
+
+        <a href="{% url 'forgot_password' %}">
+            Forgot Password?
+        </a>
+
+        <br><br>
+
+        <a href="{% url 'register' %}">
+            Don't have an account? Register
+        </a>
+
+    </div>
+
+</div>
+
+<script>
+
+function togglePassword(){
+
+    let password=document.getElementById("id_password");
+
+    if(password){
+
+        if(password.type==="password"){
+
+            password.type="text";
+
+        }else{
+
+            password.type="password";
+
+        }
+
+    }
+
+}
+
+</script>
+
+</body>
+</html>

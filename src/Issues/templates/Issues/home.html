@@ -1,0 +1,59 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Community Hero</title>
+
+    <link rel="stylesheet"
+          href="{% static 'Issues/css/style.css' %}">
+
+</head>
+
+<body>
+
+<div class="home-card">
+
+    <img
+        src="{% static 'Issues/images/logo.jpg' %}"
+        class="logo"
+        alt="Community Hero Logo"
+    >
+
+    <h1>Community Hero</h1>
+
+    <p class="subtitle">
+        AI Powered Civic Issue Reporting System
+    </p>
+
+    <p class="description">
+        Report problems, help your community,
+        and track issue resolution in real time.
+    </p>
+
+    <div class="buttons">
+
+        <a href="{% url 'login' %}" class="btn">
+            🔐 Login
+        </a>
+
+        <a href="{% url 'register' %}" class="btn">
+            📝 Register
+        </a>
+
+    </div>
+
+    <p class="footer">
+        Community Hero © 2026
+    </p>
+
+</div>
+
+</body>
+
+</html>

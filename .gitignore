@@ -1,0 +1,30 @@
+# Environment
+.env
+
+# Database
+db.sqlite3
+
+# Media & collected static files
+media/
+staticfiles/
+
+# Python cache
+__pycache__/
+*.py[cod]
+
+# Virtual environment
+Lib/
+Scripts/
+Include/
+pyvenv.cfg
+
+# Certificates
+cert.crt
+cert.key
+
+# VS Code
+.vscode/
+
+# OS files
+.DS_Store
+Thumbs.db
