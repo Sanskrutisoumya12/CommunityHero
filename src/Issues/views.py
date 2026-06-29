@@ -108,7 +108,7 @@ Please login to Community Hero to review the issue.
         form = IssueForm()
     return render(
         request,
-        "issues/create_issue.html",
+        "Issues/create_issue.html",
         {
             "form": form,
             "current_user": current_user,
@@ -132,7 +132,7 @@ def issue_list(request):
 )
     return render(
         request,
-        "issues/issue_list.html",
+        "Issues/issue_list.html",
         {
             "issues": issues,
             "current_user": current_user
@@ -175,7 +175,7 @@ def issue_detail(request, issue_id):
     )
     return render(
         request,
-        "issues/issue_detail.html",
+        "Issues/issue_detail.html",
         {
             "issue": issue,
             "form": form,
@@ -332,7 +332,7 @@ def dashboard(request):
     total_votes = Verification.objects.count()
     return render(
         request,
-        "issues/dashboard.html",
+        "Issues/dashboard.html",
         {
             "total_issues": total_issues,
             "pending": pending,
@@ -376,7 +376,7 @@ Community Hero Team
             )
             return render(
                 request,
-                "issues/check_email.html",
+                "Issues/check_email.html",
                 {
                     "email": user.email
                 }
@@ -385,7 +385,7 @@ Community Hero Team
         form = RegisterForm()
     return render(
         request,
-        "issues/register.html",
+        "Issues/register.html",
         {
             "form": form
         }
@@ -404,7 +404,7 @@ def login_view(request):
             if not user:
                 return render(
                     request,
-                    "issues/login.html",
+                    "Issues/login.html",
                     {
                         "form": form,
                         "error": "Invalid email or password"
@@ -432,7 +432,7 @@ Community Hero Team
                 )
                 return render(
                     request,
-                    "issues/login.html",
+                    "Issues/login.html",
                     {
                         "form": form,
                         "error": "Your email is not verified. A new verification email has been sent to your inbox."
@@ -461,7 +461,7 @@ Community Hero Team
         form = LoginForm()
     return render(
         request,
-        "issues/login.html",
+        "Issues/login.html",
         {
             "form": form
         }
@@ -471,7 +471,7 @@ def logout_view(request):
     request.session.flush()
     return render(
         request,
-        "issues/logout_success.html"
+        "Issues/logout_success.html"
     )
 
 def leaderboard(request):
@@ -537,9 +537,6 @@ def profile(request):
 
         rank += 1
 
-    # =======================
-    # Citizen Profile
-    # =======================
 
     if user.role == "citizen":
 
@@ -561,7 +558,7 @@ def profile(request):
 
         return render(
             request,
-            "issues/profile.html",
+            "Issues/profile.html",
             {
                 "user": user,
                 "rank": rank,
@@ -572,9 +569,7 @@ def profile(request):
             }
         )
 
-    # =======================
-    # Authority Profile
-    # =======================
+    
 
     authority_updates = AuthorityUpdate.objects.filter(
         authority=user
@@ -602,7 +597,7 @@ def profile(request):
 
     return render(
         request,
-        "issues/profile.html",
+        "Issues/profile.html",
         {
             "user": user,
             "rank": rank,
@@ -643,7 +638,7 @@ def authority_dashboard(request):
     )[:5]
     return render(
         request,
-        "issues/authority_dashboard.html",
+        "Issues/authority_dashboard.html",
         {
             "user": user,
             "total_issues": total_issues,
@@ -688,11 +683,11 @@ def forgot_password(request):
         )
         return render(
             request,
-            "issues/email_sent.html"
+            "Issues/email_sent.html"
         )
     return render(
         request,
-        "issues/forgot_password.html"
+        "Issues/forgot_password.html"
     )
 
 def change_password(request):
@@ -712,7 +707,7 @@ def change_password(request):
         if current_password != user.password:
             return render(
                 request,
-                "issues/change_password.html",
+                "Issues/change_password.html",
                 {
                     "error":
                     "Current password is incorrect."
@@ -721,7 +716,7 @@ def change_password(request):
         if new_password != confirm_password:
             return render(
                 request,
-                "issues/change_password.html",
+                "Issues/change_password.html",
                 {
                     "error":
                     "Passwords do not match."
@@ -731,11 +726,11 @@ def change_password(request):
         user.save()
         return render(
             request,
-            "issues/change_password_success.html"
+            "Issues/change_password_success.html"
         )
     return render(
         request,
-        "issues/change_password.html"
+        "Issues/change_password.html"
     )
 
 def test_email(request):
@@ -764,7 +759,7 @@ def reset_password(request, user_id):
         if new_password != confirm_password:
             return render(
                 request,
-                "issues/reset_password.html",
+                "Issues/reset_password.html",
                 {
                     "error":
                     "Passwords do not match."
@@ -775,11 +770,11 @@ def reset_password(request, user_id):
         user.save()
         return render(
             request,
-            "issues/password_reset_success.html"
+            "Issues/password_reset_success.html"
         )
     return render(
         request,
-        "issues/reset_password.html"
+        "Issues/reset_password.html"
     )
 
 
@@ -801,7 +796,7 @@ def notifications(request):
 
     return render(
         request,
-        "issues/notifications.html",
+        "Issues/notifications.html",
         {
             "notifications": notifications,
             "unread": 0,
@@ -815,14 +810,14 @@ def verify_email(request, token):
     if not user:
         return render(
             request,
-            "issues/verification_failed.html"
+            "Issues/verification_failed.html"
         )
     user.is_verified = True
     user.verification_token = ""
     user.save()
     return render(
         request,
-        "issues/register_success.html",
+        "Issues/register_success.html",
         {
             "user": user
         }
@@ -849,20 +844,20 @@ def verify_login_otp(request):
         else:
             return render(
                 request,
-                "issues/verify_login_otp.html",
+                "Issues/verify_login_otp.html",
                 {
                     "error": "Invalid OTP"
                 }
             )
     return render(
         request,
-        "issues/verify_login_otp.html"
+        "Issues/verify_login_otp.html"
     )
 
 def home(request):
     return render(
         request,
-        "issues/home.html"
+        "Issues/home.html"
     )
 
 
