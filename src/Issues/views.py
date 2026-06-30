@@ -660,7 +660,7 @@ def forgot_password(request):
         if not user:
             return render(
                 request,
-                "issues/forgot_password.html",
+                "Issues/forgot_password.html",
                 {
                     "error":
                     "No account found with this email."
