@@ -650,30 +650,50 @@ def authority_dashboard(request):
         }
     )
 
+from django.urls import reverse
+from django.core.mail import send_mail
+from django.conf import settings
+
 
 def forgot_password(request):
     if request.method == "POST":
         email = request.POST.get("email")
+
         user = UserProfile.objects.filter(
             email=email
         ).first()
+
         if not user:
             return render(
                 request,
                 "Issues/forgot_password.html",
                 {
-                    "error":
-                    "No account found with this email."
+                    "error": "No account found with this email."
                 }
             )
+
+        # Create the correct Render URL automatically
+        reset_link = request.build_absolute_uri(
+            reverse(
+                "reset_password",
+                args=[user.id]
+            )
+        )
+
         message = f"""
-        Hello {user.name},
-        We received a request to reset your password.
-        Click the link below:
-        https://127.0.0.1:8000/reset-password/{user.id}/
-        If you did not request this, please ignore this email.
-        Community Hero Team
-        """
+Hello {user.name},
+
+We received a request to reset your password.
+
+Click the link below to reset your password:
+
+{reset_link}
+
+If you did not request this, please ignore this email.
+
+Community Hero Team
+"""
+
         send_mail(
             "Community Hero Password Reset",
             message,
@@ -681,10 +701,12 @@ def forgot_password(request):
             [email],
             fail_silently=False,
         )
+
         return render(
             request,
             "Issues/email_sent.html"
         )
+
     return render(
         request,
         "Issues/forgot_password.html"
